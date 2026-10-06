@@ -1,0 +1,20 @@
+resources:
+  pipelines:
+    foot_traffic:
+      name: "foot-traffic-medallion-${bundle.target}"
+      catalog: ${var.catalog}
+      schema: bronze
+      serverless: true
+      continuous: false
+      photon: true
+      configuration:
+        # Read by the code via spark.conf.get("project.catalog").
+        # This single line is the entire promotion mechanism.
+        project.catalog: ${var.catalog}
+      libraries:
+        - file:
+            path: ../src/transformations/01_bronze.py
+        - file:
+            path: ../src/transformations/02_silver.py
+        - file:
+            path: ../src/transformations/03_gold.sql

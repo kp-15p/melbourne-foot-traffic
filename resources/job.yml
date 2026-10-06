@@ -1,0 +1,46 @@
+resources:
+  jobs:
+    foot_traffic_daily:
+      name: "foot-traffic-daily-${bundle.target}"
+      max_concurrent_runs: 1
+      queue:
+        enabled: true
+
+      schedule:
+        quartz_cron_expression: "0 15 6 * * ?"
+        timezone_id: "Australia/Melbourne"
+        pause_status: ${var.schedule_status}
+
+      email_notifications:
+        on_failure:
+          - ${var.alert_email}
+
+      tasks:
+        - task_key: extract_land
+          notebook_task:
+            notebook_path: ../src/notebooks/10_extract_land.py
+            base_parameters:
+              catalog: ${var.catalog}
+          max_retries: 3
+          min_retry_interval_millis: 60000
+          retry_on_timeout: true
+
+        - task_key: run_pipeline
+          depends_on:
+            - task_key: extract_land
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.foot_traffic.id}
+          max_retries: 2
+          min_retry_interval_millis: 120000
+          email_notifications:
+            on_failure:
+              - ${var.alert_email}
+
+        - task_key: quality_gate
+          depends_on:
+            - task_key: run_pipeline
+          notebook_task:
+            notebook_path: ../src/notebooks/20_quality_gate.py
+            base_parameters:
+              catalog: ${var.catalog}
+          max_retries: 0

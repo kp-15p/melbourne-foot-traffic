@@ -1,0 +1,31 @@
+bundle:
+  name: melbourne-foot-traffic
+
+include:
+  - resources/*.yml
+
+variables:
+  catalog:
+    description: "Unity Catalog this target writes to"
+  alert_email:
+    description: "Where failure notifications go"
+    default: "kpohare694@gmail.com"
+  schedule_status:
+    description: "PAUSED in dev so it never runs unattended"
+    default: "PAUSED"
+
+targets:
+  dev:
+    mode: development
+    default: true
+    variables:
+      catalog: ped_dev
+      schedule_status: PAUSED
+
+  prod:
+    mode: production
+    variables:
+      catalog: ped_prod
+      schedule_status: UNPAUSED
+    workspace:
+      root_path: /Workspace/Users/kpohare694@gmail.com/.bundle/${bundle.name}/${bundle.target}
