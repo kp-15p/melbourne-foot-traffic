@@ -4,6 +4,8 @@ Hourly pedestrian counts for the City of Melbourne, from a public REST API to go
 
 **1,624,373 hourly readings · 103 sensors · 730 days · 9 tables · 3-task scheduled job**
 
+[The finding](#the-finding) · [Architecture](#architecture) · [Three bugs worth recording](#three-bugs-worth-recording) · [dev→prod](#dev--prod) · [Constraints](#constraints-and-what-id-change-with-a-budget)
+
 ---
 
 ## The finding
