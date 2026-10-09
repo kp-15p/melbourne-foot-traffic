@@ -10,9 +10,9 @@ Hourly pedestrian counts for the City of Melbourne, from a public REST API to go
 
 ## The finding
 
-**The City of Melbourne's sensor registry lists 134 active pedestrian sensors. 31 of them have not produced a single reading in two years.**
+**The City of Melbourne's sensor registry lists 134 active pedestrian sensors. 34 of them have not produced a single reading in two years — and 3 sensors produce readings while appearing nowhere in the registry at all.**
 
-Not "offline recently" — never, across 730 days, while flagged `status = 'A'`.
+Not "offline recently" — never, across the full window, while flagged `status = 'A'`. The integrity gap runs in both directions: 134 sensors registered active, only 100 of which have ever reported, against 103 distinct sensors actually present in the data.
 
 It gets worse once you look at the sensors that *do* work:
 
@@ -24,7 +24,7 @@ It gets worse once you look at the sensors that *do* work:
 | partial outage (>4 hours lost) | 97 | 6,212 | 6.6% |
 | suspect (24 hours of zeros) | 1 | 1 | <0.1% |
 
-**Exactly half of expected sensor-days are complete**, and that figure is stable across all 24 months — it is the structural condition of the network, not a bad patch. Note the `sensors affected` column: 95 of the 103 working sensors drop hours regularly. A sensor reporting 23 of 24 hours looks perfectly healthy in any daily total, and nobody would ever notice.
+**Exactly half of expected sensor-days are complete** — but that headline is two findings welded together. The 34 permanently-silent sensors contribute 24,922 sensor-days at 0% and drag a quarter of the grid to zero on their own; the sensors that *do* report are **67.9% complete**. 49.9% is the honest figure for the network as published; 67.9% is the honest figure for the hardware that works. Both are stable across all 24 months — this is the structural condition of the network, not a bad patch. Note the `sensors affected` column: 95 of the 97 reporting sensors drop hours regularly. A sensor reporting 23 of 24 hours looks perfectly healthy in any daily total, and nobody would ever notice.
 
 None of this is visible from the published data. It only appears when you build the grid of readings you *should* have received and reconcile actuals against it. Every analysis of this dataset that trusts `status = 'A'`, or that treats absence as zero, is quietly wrong.
 
